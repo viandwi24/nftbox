@@ -1,17 +1,40 @@
-use anchor_lang::prelude::*;
+use {
+    anchor_lang::prelude::*,
+    instructions::*,
+    instructions::{
+        PingContext,
+        CreateBoxSetContext,
+    },
+};
 
-declare_id!("4CJB5XECQadXrKebw3LFRstheFPEN7cCQvjHYcXStgLJ");
+pub mod instructions;
+pub mod state;
+pub mod constant;
+pub mod error;
+
+declare_id!("2R4MEs4jN1vU22HSThywX5hy3RW5VPPavUseVgGFQ3Kc");
 
 #[program]
 pub mod nftbox {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        Ok(())
+    pub fn ping(ctx: Context<PingContext>, msg: String) -> Result<()> {
+        return instructions::ping(ctx, msg)
+    }
+
+    pub fn create_box_set(
+        ctx: Context<CreateBoxSetContext>,
+        name: String,
+        description: String,
+        image: String,
+        supply: u64,
+    ) -> Result<()> {
+        return instructions::create_box_set(
+            ctx,
+            name,
+            description,
+            image,
+            supply,
+        )
     }
 }
-
-#[derive(Accounts)]
-pub struct Initialize {}
-
-#[derive]
