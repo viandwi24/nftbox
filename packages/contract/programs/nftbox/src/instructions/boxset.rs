@@ -8,7 +8,7 @@ use {
             PROGRAM_SEED_PREFIX_BOX,
         },
         state::{
-            BoxAccount,
+            BoxSetAccount,
         },
         error::{
             CreateBoxSetError,
@@ -23,7 +23,7 @@ pub fn create_box_set(
     image: String,
     supply: u64,
 ) -> Result<()> {
-    
+
     msg!("[nftbox] Create box with name: {}", name);
     msg!("[nftbox] description: {}", description);
     msg!("[nftbox] image: {}", image);
@@ -35,16 +35,16 @@ pub fn create_box_set(
     }
 
     // create box account
-    let box_account = &mut ctx.accounts.box_account;
-    box_account.name = name;
-    box_account.description = description;
-    box_account.image = image;
-    box_account.authority = ctx.accounts.authority.key();
-    box_account.supply = supply;
-    box_account.box_cards = 0;
-    box_account.state = 0;
-    
-    msg!("[nftbox] Box account created successfully with address: {} | {}", box_account.key(), box_account.to_account_info().key());
+    let box_set_account = &mut ctx.accounts.box_set_account;
+    box_set_account.name = name;
+    box_set_account.description = description;
+    box_set_account.image = image;
+    box_set_account.authority = ctx.accounts.authority.key();
+    box_set_account.supply = supply;
+    box_set_account.box_cards = 0;
+    box_set_account.state = 0;
+
+    msg!("[nftbox] Box account created successfully with address: {} | {}", box_set_account.key(), box_set_account.to_account_info().key());
 
     // ok
     Ok(())
@@ -66,7 +66,7 @@ pub struct CreateBoxSetContext<'info> {
         ],
         bump,
     )]
-    pub box_account: Account<'info, BoxAccount>,
+    pub box_set_account: Account<'info, BoxSetAccount>,
     #[account(mut)]
     pub authority: Signer<'info>,
     #[account(mut)]

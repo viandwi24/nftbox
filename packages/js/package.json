@@ -1,0 +1,28 @@
+{
+  "name": "@nftbox/js",
+  "version": "1.0.0",
+  "description": "a javascript library for nftbox",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.json",
+    "build:watch": "rimraf dist && tsc -p tsconfig.json --watch --preserveWatchOutput",
+    "dev": "nodemon --watch dist -e js,d.ts,js.map --exec \"pnpm run build:watch\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nftbox/contract": "workspace:*",
+    "nodemon": "^2.0.21",
+    "rimraf": "^4.4.0",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@project-serum/anchor": "^0.26.0",
+    "@solana/web3.js": "^1.73.3"
+  }
+}

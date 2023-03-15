@@ -3,7 +3,7 @@ use anchor_lang::prelude::*;
 // mistery box account
 // fields : name, description, image, authority, supply, box_cards, state
 #[account]
-pub struct BoxAccount {
+pub struct BoxSetAccount {
     // name of the box
     pub name: String, // 4 + 30
     // description of the box
@@ -18,4 +18,20 @@ pub struct BoxAccount {
     pub box_cards: u64, // 8
     // state of the box (0: open, 1: closed)
     pub state: u8, // 1
+}
+
+// cards on the box account
+// fields: boxset, masterEdition, masterEditionMetadata, token_account, max_supply
+#[account]
+pub struct BoxSetCardAccount {
+    // boxset of the card
+    pub boxset: Pubkey, // 32
+    // master edition of the card
+    pub master_edition: Pubkey, // 32
+    // master edition metadata of the card
+    pub master_edition_metadata: Pubkey, // 32
+    // token account of the card
+    pub token_account: Pubkey, // 32
+    // max supply of the card
+    pub max_supply: u64, // 8
 }

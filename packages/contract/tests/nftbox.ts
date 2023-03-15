@@ -3,69 +3,17 @@ import { Connection, PublicKey, SendTransactionError } from "@solana/web3.js";
 import { Program } from "@project-serum/anchor";
 import { Nftbox } from "../target/types/nftbox";
 import { assert } from "chai";
-
-class NftBoxContract {
-  program!: anchor.Program<Nftbox>
-  wallet!:  anchor.Wallet
-  provider!: anchor.Provider
-  connection!: Connection
-
-  opts = {
-    seed: {
-      PROGRAM_SEED: 'nftbox',
-      PROGRAM_SEED_PREFIX_BOX: 'box',
-    }
-  }
-
-  constructor(idl: any, w: anchor.Wallet, c: Connection) {
-    const connection = new Connection(c.rpcEndpoint, 'confirmed')
-    const provider = new anchor.AnchorProvider(connection, w, {})
-    anchor.setProvider(provider)
-    const program = new anchor.Program(idl, idl?.metadata?.address || '', provider)
-    if (!program) throw new Error('Program not found')
-    this.program = program
-    this.wallet = w
-    this.provider = provider
-  }
-
-  findPDABoxSet(
-    authority: PublicKey,
-    name: string,
-  ) {
-    const [pda] = anchor.web3.PublicKey.findProgramAddressSync(
-      [
-        Buffer.from(this.opts.seed.PROGRAM_SEED),
-        Buffer.from(this.opts.seed.PROGRAM_SEED_PREFIX_BOX),
-        authority.toBuffer(),
-        Buffer.from(name),
-      ],
-      this.program.programId,
-    );
-    return pda;
-  }
-
-  async getBoxSetData(pb: PublicKey) {
-    try {
-      return await this.program.account.boxAccount.fetch(pb)
-    } catch (error) {
-      return undefined
-    }
-  }
-  
-  async getBoxSetAccountCount() {
-    return (await this.program.account.boxAccount.all()).length
-  }
-}
+import { NftBoxContract } from "@nftbox/js"
 
 describe("nftbox", () => {
   // Configure the client to use the local cluster.
   anchor.setProvider(anchor.AnchorProvider.env());
-  
+
   const wallet = (anchor.getProvider() as any)?.wallet as anchor.Wallet;
   const program = anchor.workspace.Nftbox as Program<Nftbox>;
 
   const createContract = (w: anchor.Wallet) => {
-    return new NftBoxContract(program.idl, w, program.provider.connection)
+    return new NftBoxContract(w, program.provider.connection, program.idl)
   }
 
   it("boxset::create", async () => {
@@ -100,7 +48,7 @@ describe("nftbox", () => {
     const boxAccountData = await contract.getBoxSetData(boxAccount)
     if (boxAccountData) assert.fail("Box Set already exists")
 
-    
+
     try {
       const tx = await program.methods
         .createBoxSet(
@@ -124,7 +72,7 @@ describe("nftbox", () => {
     const boxset_name = `Example 3 Nft Random Box (${await contract.getBoxSetAccountCount()})`
 
     const boxAccount = contract.findPDABoxSet(wallet.publicKey, boxset_name)
-    
+
     try {
       const tx = await program.methods
         .createBoxSet(
