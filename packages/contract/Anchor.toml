@@ -3,7 +3,7 @@ seeds = false
 skip-lint = false
 
 [programs.devnet]
-nftbox = "2R4MEs4jN1vU22HSThywX5hy3RW5VPPavUseVgGFQ3Kc"
+nftbox = "49sBLw7oMr8XfpGnaS1efChgJqzDEJpKaWjhwft2Loz7"
 
 [registry]
 url = "https://api.apr.dev"

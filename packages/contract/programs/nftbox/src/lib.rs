@@ -4,6 +4,7 @@ use {
     instructions::{
         PingContext,
         CreateBoxSetContext,
+        AddCardToBoxSetContext,
     },
 };
 
@@ -11,8 +12,9 @@ pub mod instructions;
 pub mod state;
 pub mod constant;
 pub mod error;
+pub mod utils;
 
-declare_id!("2R4MEs4jN1vU22HSThywX5hy3RW5VPPavUseVgGFQ3Kc");
+declare_id!("49sBLw7oMr8XfpGnaS1efChgJqzDEJpKaWjhwft2Loz7");
 
 #[program]
 pub mod nftbox {
@@ -27,14 +29,24 @@ pub mod nftbox {
         name: String,
         description: String,
         image: String,
-        supply: u64,
+        max_supply: u64,
     ) -> Result<()> {
         return instructions::create_box_set(
             ctx,
             name,
             description,
             image,
-            supply,
+            max_supply,
+        )
+    }
+
+    pub fn add_card_to_box_set(
+        ctx: Context<AddCardToBoxSetContext>,
+        index: u64,
+    ) -> Result<()> {
+        return instructions::add_card_to_box_set(
+            ctx,
+            index,
         )
     }
 }

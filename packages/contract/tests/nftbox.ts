@@ -1,30 +1,27 @@
 import * as anchor from "@project-serum/anchor";
-import { Connection, PublicKey, SendTransactionError } from "@solana/web3.js";
+import { Connection, Keypair, PublicKey, SendTransactionError } from "@solana/web3.js";
 import { Program } from "@project-serum/anchor";
 import { Nftbox } from "../target/types/nftbox";
 import { assert } from "chai";
 import { NftBoxContract } from "@nftbox/js"
 
-describe("nftbox", () => {
-  // Configure the client to use the local cluster.
-  anchor.setProvider(anchor.AnchorProvider.env());
+// types
+type RunTest = (wallet: anchor.Wallet, createContract: (w: anchor.Wallet) => NftBoxContract) => void
 
-  const wallet = (anchor.getProvider() as any)?.wallet as anchor.Wallet;
-  const program = anchor.workspace.Nftbox as Program<Nftbox>;
+// utils
+const generateBoxSetName = async (contract: NftBoxContract) => `Example 3 Nft Random Box (${await contract.getBoxSetAccountCount() + 1})`
 
-  const createContract = (w: anchor.Wallet) => {
-    return new NftBoxContract(w, program.provider.connection, program.idl)
-  }
-
+// tests
+const runBoxSetTest: RunTest = (wallet, createContract) => {
   it("boxset::create", async () => {
     const contract = createContract(wallet)
     const boxset_name = `Example 3 Nft Random Box (${await contract.getBoxSetAccountCount() + 1})`
 
     const boxAccount = contract.findPDABoxSet(wallet.publicKey, boxset_name)
-    const boxAccountData = await contract.getBoxSetData(boxAccount)
+    const boxAccountData = await contract.getBoxSetAccountData(boxAccount)
     if (boxAccountData) assert.fail("Box Set already exists")
 
-    const tx = await program.methods
+    const tx = await contract.program.methods
       .createBoxSet(
         boxset_name,
         "get 3 random nfts from the 5 collection in the box",
@@ -33,24 +30,52 @@ describe("nftbox", () => {
       )
       .accounts({
         authority: wallet.publicKey,
-        boxAccount,
+        boxSet: boxAccount,
       })
       .rpc()
 
     assert.ok(tx)
   });
 
-  it("boxset::create::error.supply", async () => {
+  it("boxset::create::error.authority_not_signer", async () => {
     const contract = createContract(wallet)
     const boxset_name = `Example 3 Nft Random Box (${await contract.getBoxSetAccountCount() + 1})`
 
     const boxAccount = contract.findPDABoxSet(wallet.publicKey, boxset_name)
-    const boxAccountData = await contract.getBoxSetData(boxAccount)
+    const boxAccountData = await contract.getBoxSetAccountData(boxAccount)
     if (boxAccountData) assert.fail("Box Set already exists")
 
 
     try {
-      const tx = await program.methods
+      const generatedWallet = Keypair.generate()
+      const tx = await contract.program.methods
+        .createBoxSet(
+          boxset_name,
+          "get 3 random nfts from the 5 collection in the box",
+          "https://picsum.photos/200",
+          new anchor.BN(5),
+        )
+        .accounts({
+          authority: generatedWallet.publicKey, // <== authority is not signer so it will make error
+          boxSet: boxAccount,
+        })
+        .rpc()
+    } catch (error) {
+      assert.equal(error.message, "Signature verification failed")
+    }
+  });
+
+  it("boxset::create::error.supply_must_greater_than_0", async () => {
+    const contract = createContract(wallet)
+    const boxset_name = `Example 3 Nft Random Box (${await contract.getBoxSetAccountCount() + 1})`
+
+    const boxAccount = contract.findPDABoxSet(wallet.publicKey, boxset_name)
+    const boxAccountData = await contract.getBoxSetAccountData(boxAccount)
+    if (boxAccountData) assert.fail("Box Set already exists")
+
+
+    try {
+      const tx = await contract.program.methods
         .createBoxSet(
           boxset_name,
           "get 3 random nfts from the 5 collection in the box",
@@ -59,7 +84,7 @@ describe("nftbox", () => {
         )
         .accounts({
           authority: wallet.publicKey,
-          boxAccount,
+          boxSet: boxAccount,
         })
         .rpc()
     } catch (error) {
@@ -67,14 +92,14 @@ describe("nftbox", () => {
     }
   });
 
-  it("boxset::create::error.duplicate", async () => {
+  it("boxset::create::error.duplicate_box_name", async () => {
     const contract = createContract(wallet)
     const boxset_name = `Example 3 Nft Random Box (${await contract.getBoxSetAccountCount()})`
 
     const boxAccount = contract.findPDABoxSet(wallet.publicKey, boxset_name)
 
     try {
-      const tx = await program.methods
+      const tx = await contract.program.methods
         .createBoxSet(
           boxset_name, // <== this name is already exists, so it will make error
           "get 3 random nfts from the 5 collection in the box",
@@ -83,7 +108,7 @@ describe("nftbox", () => {
         )
         .accounts({
           authority: wallet.publicKey,
-          boxAccount,
+          boxSet: boxAccount,
         })
         .rpc()
     } catch (error) {
@@ -101,4 +126,46 @@ describe("nftbox", () => {
       }
     }
   });
+}
+
+const runBoxSetCardTest: RunTest = (wallet, createContract) => {
+  it("card::add_to_boxset", async () => {
+    const contract = createContract(wallet)
+
+    // create box set first
+    // const boxSetCreated = await contract.boxset().create(
+    //   await generateBoxSetName(contract),
+    //   'get 3 random nfts from the 5 collection in the box',
+    //   'https://picsum.photos/200',
+    //   5
+    // )
+
+    // add card to box set
+    await contract.boxset().add_card(
+      // boxSetCreated.boxSet,
+      new PublicKey('BnUjnq6fTrYPRyYQw8J1x7Wm9DazzZho9o3acTaZU9zK'),
+      {
+        master_edition: new PublicKey('7YBKsLYMqfarTEur4hf2f2w6HnnxDSHV822TVw5t35Nu'),
+        master_edition_metadata: new PublicKey('E16TENdrNbmqrr4d7UJiTcJfQASXy8FT3GMMz2ucuz95'),
+        token: new PublicKey('GYaVdQZubCqkzYCFrvTn1VyyMhEyD63XNjVf6hpVCn1U'),
+      }
+    )
+  })
+}
+
+describe("nftbox", () => {
+  // Configure the client to use the local cluster.
+  anchor.setProvider(anchor.AnchorProvider.env());
+
+  // setups
+  const wallet = (anchor.getProvider() as any)?.wallet as anchor.Wallet;
+  const program = anchor.workspace.Nftbox as Program<Nftbox>;
+  const createContract = (w: anchor.Wallet) => {
+    return new NftBoxContract(w, program.provider.connection, program.idl)
+  }
+
+
+  // run tests suite
+  // runBoxSetTest(wallet, createContract)
+  runBoxSetCardTest(wallet, createContract)
 });

@@ -12,6 +12,9 @@ use {
         },
         error::{
             CreateBoxSetError,
+        },
+        utils::{
+            assert_signer,
         }
     },
 };
@@ -21,30 +24,35 @@ pub fn create_box_set(
     name: String,
     description: String,
     image: String,
-    supply: u64,
+    max_supply: u64,
 ) -> Result<()> {
-
+    // log
     msg!("[nftbox] Create box with name: {}", name);
     msg!("[nftbox] description: {}", description);
     msg!("[nftbox] image: {}", image);
-    msg!("[nftbox] supply: {}", supply);
+    msg!("[nftbox] max_supply: {}", max_supply);
 
     // validate box account data
-    if supply <= 0 {
+    if max_supply <= 0 {
         return Err(CreateBoxSetError::SupplyMustBeGreaterThanZero.into());
     }
 
-    // create box account
-    let box_set_account = &mut ctx.accounts.box_set_account;
-    box_set_account.name = name;
-    box_set_account.description = description;
-    box_set_account.image = image;
-    box_set_account.authority = ctx.accounts.authority.key();
-    box_set_account.supply = supply;
-    box_set_account.box_cards = 0;
-    box_set_account.state = 0;
+    // authority must signer
+    assert_signer(&ctx.accounts.authority.to_account_info())?;
 
-    msg!("[nftbox] Box account created successfully with address: {} | {}", box_set_account.key(), box_set_account.to_account_info().key());
+    // create box account
+    let box_set = &mut ctx.accounts.box_set;
+    box_set.name = name;
+    box_set.description = description;
+    box_set.image = image;
+    box_set.authority = ctx.accounts.authority.key();
+    box_set.max_supply = max_supply;
+    box_set.supply = 0;
+    box_set.box_cards = 0;
+    box_set.state = 0;
+
+    // log
+    msg!("[nftbox] Box account created successfully with address: {} | {}", box_set.key(), box_set.to_account_info().key());
 
     // ok
     Ok(())
@@ -57,7 +65,7 @@ pub struct CreateBoxSetContext<'info> {
     #[account(
         init,
         payer = user,
-        space = 8 + (4 + 30) + (4 + 256) + (4 + 256) + 32 + 8 + 8 + 1,
+        space = 8 + (4 + 30) + (4 + 256) + (4 + 256) + 32 + 8 + 8 + 8 + 1,
         seeds = [
             PROGRAM_SEED.as_bytes(),
             PROGRAM_SEED_PREFIX_BOX.as_bytes(),
@@ -66,7 +74,7 @@ pub struct CreateBoxSetContext<'info> {
         ],
         bump,
     )]
-    pub box_set_account: Account<'info, BoxSetAccount>,
+    pub box_set: Account<'info, BoxSetAccount>,
     #[account(mut)]
     pub authority: Signer<'info>,
     #[account(mut)]

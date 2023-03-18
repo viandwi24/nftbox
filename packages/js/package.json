@@ -10,7 +10,7 @@
   "scripts": {
     "build": "rimraf dist && tsc -p tsconfig.json",
     "build:watch": "rimraf dist && tsc -p tsconfig.json --watch --preserveWatchOutput",
-    "dev": "nodemon --watch dist -e js,d.ts,js.map --exec \"pnpm run build:watch\""
+    "dev": "nodemon --watch dist --watch ../contract/target/idl -e js,d.ts,js.map,json --exec \"pnpm run build:watch\""
   },
   "keywords": [],
   "author": "",

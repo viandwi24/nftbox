@@ -12,7 +12,9 @@ pub struct BoxSetAccount {
     pub image: String, // 4 + 256
     // authority of the box (who can update the box)
     pub authority: Pubkey, // 32
-    // supply of the box (how many box can be opened)
+    // max supply of the box (how many box can be opened)
+    pub max_supply: u64, // 8
+    // supply counter of the box (how many box have been opened)
     pub supply: u64, // 8
     // card master counter
     pub box_cards: u64, // 8
@@ -25,13 +27,11 @@ pub struct BoxSetAccount {
 #[account]
 pub struct BoxSetCardAccount {
     // boxset of the card
-    pub boxset: Pubkey, // 32
+    pub box_set: Pubkey, // 32
     // master edition of the card
     pub master_edition: Pubkey, // 32
     // master edition metadata of the card
-    pub master_edition_metadata: Pubkey, // 32
+    pub metadata: Pubkey, // 32
     // token account of the card
     pub token_account: Pubkey, // 32
-    // max supply of the card
-    pub max_supply: u64, // 8
 }
