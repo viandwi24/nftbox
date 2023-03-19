@@ -41,6 +41,7 @@ const submit = async () => {
     if (err instanceof Error) {
       error.value = `${err.message} (${err.name})`
     }
+    console.error(err)
   }
 
   loading.value = false

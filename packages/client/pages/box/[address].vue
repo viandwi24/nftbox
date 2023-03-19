@@ -74,7 +74,7 @@ const fetch = async () => {
     }
   } catch (err) {
     if (err instanceof Error) error.value = `${err.message} (${err.name})`
-    console.error(error)
+    console.error(err)
   }
   loading.value = false
 }
@@ -100,7 +100,8 @@ const fetchBoxCards = async () => {
       })
       const _json = (JSON.parse(await $fetch(data.uri, {}))) as JsonMetadata
       card.json = _json
-    } catch (error) {
+    } catch (err) {
+      console.error(err)
       continue
     }
   }
