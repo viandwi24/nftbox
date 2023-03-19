@@ -1,5 +1,4 @@
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill"
-import nodePolyfills from "rollup-plugin-node-polyfills"
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -23,11 +22,11 @@ export default defineNuxtConfig({
       rollupOptions: {
       },
       commonjsOptions: {
-        exclude: ["@nftbox/js"]
+        exclude: ["@nftbox/js", "@nftbox/contract"]
       }
     },
     optimizeDeps: {
-      include: ["@project-serum/anchor", "@solana/web3.js", "buffer", "@nftbox/js", "@metaplex-foundation/js"],
+      include: ["@project-serum/anchor", "@solana/web3.js", "buffer", "@nftbox/js", "@nftbox/contract", "@metaplex-foundation/js"],
       esbuildOptions: {
         target: "esnext",
         define: {
