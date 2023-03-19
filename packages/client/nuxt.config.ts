@@ -9,10 +9,6 @@ export default defineNuxtConfig({
     preset: 'vercel-edge'
   },
 
-  build: {
-    transpile: ["@nftbox/js", "@metaplex-foundation/js"]
-  },
-
   vite: {
     resolve: {
       alias: {
@@ -30,11 +26,20 @@ export default defineNuxtConfig({
       target: "esnext",
       rollupOptions: {
       },
+      commonjsOptions: {
+        exclude: ["@nftbox/js"]
+      }
     },
     optimizeDeps: {
       include: ["@project-serum/anchor", "@solana/web3.js", "buffer", "@nftbox/js", "@metaplex-foundation/js"],
       esbuildOptions: {
         target: "esnext",
+        define: {
+          global: "globalThis",
+        },
+        plugins: [
+          NodeGlobalsPolyfillPlugin() as any,
+        ]
       },
     },
     define: {
