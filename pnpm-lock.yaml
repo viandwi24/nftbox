@@ -10,7 +10,9 @@ importers:
 
   packages/client:
     specifiers:
+      '@esbuild-plugins/node-globals-polyfill': ^0.2.3
       '@metaplex-foundation/js': ^0.18.3
+      '@metaplex-foundation/mpl-token-metadata': ^2.9.1
       '@nftbox/contract': workspace:*
       '@nftbox/js': workspace:*
       '@nfteyez/sol-rayz': ^0.10.2
@@ -20,12 +22,16 @@ importers:
       '@solana/wallet-adapter-base': ^0.9.22
       '@solana/wallet-adapter-wallets': ^0.19.15
       '@solana/web3.js': ^1.73.3
+      base58-js: ^2.0.0
       nuxt: ^3.3.1
       nuxt-icon: ^0.3.3
+      rollup-plugin-node-polyfills: ^0.2.1
       sass: ^1.59.3
       solana-wallets-vue: ^0.5.2
     devDependencies:
+      '@esbuild-plugins/node-globals-polyfill': 0.2.3
       '@metaplex-foundation/js': 0.18.3
+      '@metaplex-foundation/mpl-token-metadata': 2.9.1
       '@nftbox/contract': link:../contract
       '@nftbox/js': link:../js
       '@nfteyez/sol-rayz': 0.10.2_@solana+web3.js@1.73.3
@@ -35,8 +41,10 @@ importers:
       '@solana/wallet-adapter-base': 0.9.22_@solana+web3.js@1.73.3
       '@solana/wallet-adapter-wallets': 0.19.15_@solana+web3.js@1.73.3
       '@solana/web3.js': 1.73.3
+      base58-js: 2.0.0
       nuxt: 3.3.1_sass@1.59.3
       nuxt-icon: 0.3.3
+      rollup-plugin-node-polyfills: 0.2.1
       sass: 1.59.3
       solana-wallets-vue: 0.5.2_@solana+web3.js@1.73.3
 
@@ -855,6 +863,12 @@ packages:
     dependencies:
       postcss: 8.4.21
       postcss-selector-parser: 6.0.11
+    dev: true
+
+  /@esbuild-plugins/node-globals-polyfill/0.2.3:
+    resolution: {integrity: sha512-r3MIryXDeXDOZh7ih1l/yE9ZLORCd5e8vWg02azWRGj5SPTuoh69A2AIyn0Z31V/kHBfZ4HgWJ+OK3GTTwLmnw==}
+    peerDependencies:
+      esbuild: '*'
     dev: true
 
   /@esbuild/android-arm/0.16.17:
@@ -5116,7 +5130,7 @@ packages:
   /axios/0.21.4_debug@4.3.4:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.15.2_debug@4.3.4
+      follow-redirects: 1.15.2
     transitivePeerDependencies:
       - debug
     dev: true
@@ -5150,6 +5164,11 @@ packages:
 
   /base-x/4.0.0:
     resolution: {integrity: sha512-FuwxlW4H5kh37X/oW59pwTzzTKRzfrrQwhmyspRM7swOEZcHtDZSCt45U6oKgtuFE+WYPblePMVIPR4RZrh/hw==}
+    dev: true
+
+  /base58-js/2.0.0:
+    resolution: {integrity: sha512-nAV5d32QXuGcGptSApkKpC1gGakWBnfJMNjKrYTBh4tb0szfZF+ooueFLy8T4VrY+o4SrE/TyrtUnRZcwZchaA==}
+    engines: {node: '>= 8'}
     dev: true
 
   /base64-js/1.5.1:
@@ -6969,6 +6988,10 @@ packages:
     engines: {node: '>=4.0'}
     dev: true
 
+  /estree-walker/0.6.1:
+    resolution: {integrity: sha512-SqmZANLWS0mnatqbSfRP5g8OXZC12Fgg1IwNtLsyHDzJizORW4khDfjPqJZsemPWBB2uqykUah5YpQ6epsqC/w==}
+    dev: true
+
   /estree-walker/2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
     dev: true
@@ -7306,18 +7329,6 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
-    dev: true
-
-  /follow-redirects/1.15.2_debug@4.3.4:
-    resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-    dependencies:
-      debug: 4.3.4
     dev: true
 
   /for-each/0.3.3:
@@ -11609,6 +11620,21 @@ packages:
       bn.js: 5.2.1
     dev: true
 
+  /rollup-plugin-inject/3.0.2:
+    resolution: {integrity: sha512-ptg9PQwzs3orn4jkgXJ74bfs5vYz1NCZlSQMBUA0wKcGp5i5pA1AO3fOUEte8enhGUC+iapTCzEWw2jEFFUO/w==}
+    deprecated: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-inject.
+    dependencies:
+      estree-walker: 0.6.1
+      magic-string: 0.25.9
+      rollup-pluginutils: 2.8.2
+    dev: true
+
+  /rollup-plugin-node-polyfills/0.2.1:
+    resolution: {integrity: sha512-4kCrKPTJ6sK4/gLL/U5QzVT8cxJcofO0OU74tnB19F40cmuAKSzH5/siithxlofFEjwvw1YAhPmbvGNA6jEroA==}
+    dependencies:
+      rollup-plugin-inject: 3.0.2
+    dev: true
+
   /rollup-plugin-visualizer/5.9.0_rollup@3.19.1:
     resolution: {integrity: sha512-bbDOv47+Bw4C/cgs0czZqfm8L82xOZssk4ayZjG40y9zbXclNk7YikrZTDao6p7+HDiGxrN0b65SgZiVm9k1Cg==}
     engines: {node: '>=14'}
@@ -11624,6 +11650,12 @@ packages:
       rollup: 3.19.1
       source-map: 0.7.4
       yargs: 17.7.1
+    dev: true
+
+  /rollup-pluginutils/2.8.2:
+    resolution: {integrity: sha512-EEp9NhnUkwY8aif6bxgovPHMoMoNr2FulJziTndpt5H9RdwC47GSGuII9XxpSdzVGM0GWrNPHV6ie1LTNJPaLQ==}
+    dependencies:
+      estree-walker: 0.6.1
     dev: true
 
   /rollup/3.19.1:

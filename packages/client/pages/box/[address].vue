@@ -2,13 +2,15 @@
 import { PublicKey } from '@solana/web3.js'
 import { getParsedAccountByMint } from '@nfteyez/sol-rayz'
 import { getAssociatedTokenAddress } from '@solana/spl-token'
+import { Metaplex, JsonMetadata } from '@metaplex-foundation/js'
+// @ts-ignore
+import { binary_to_base58 } from 'base58-js'
 
 const $router = useRouter()
 const $route = useRoute()
 const { nftbox } = useContract()
 const anchorWallet = useAnchorWallet()
 const { connection } = useConnection()
-// const $mpx = useMetaplex()
 
 useCardItem('.card-container .card-item-inside')
 
@@ -34,6 +36,7 @@ const boxset = ref<{
     master_edition: string
     metadata: string
     token: string
+    json: JsonMetadata
   }[]
 }>()
 
@@ -48,14 +51,10 @@ const modelCard = ref({
 const isAuthority = computed(() => boxset.value?.authority === anchorWallet.value?.publicKey?.toBase58())
 
 const fetch = async () => {
-  if (!anchorWallet.value) return
-
   loading.value = true
   try {
     const _data_box = await nftbox.value?.getBoxSetAccountData(new PublicKey(boxSetAddress.value))
     const _data_cards = await nftbox.value?.getBoxSetCardAccountDataAllByBoxSet(new PublicKey(boxSetAddress.value))
-
-    console.log('data', _data_box, _data_cards)
     boxset.value = {
       address: boxSetAddress.value,
       authority: _data_box?.authority.toBase58() || '',
@@ -70,6 +69,7 @@ const fetch = async () => {
         master_edition: c.account.masterEdition.toBase58(),
         metadata: c.account.metadata.toBase58(),
         token: c.account.tokenAccount.toBase58(),
+        json: {}
       })) || [],
     }
   } catch (err) {
@@ -77,6 +77,35 @@ const fetch = async () => {
     console.error(error)
   }
   loading.value = false
+}
+
+const GetNftMetadata = async (metaplex: Metaplex, mint: string) => {
+  const metadata = await metaplex.nfts().findByMint({
+    mintAddress: new PublicKey(mint),
+    loadJsonMetadata: true,
+  })
+  return metadata.json
+}
+
+const fetchBoxCards = async () => {
+  const mpx = Metaplex.make(connection.value)
+
+  const cards = boxset.value?.cards || []
+  for (const card of cards) {
+    try {
+      const data = await mpx.nfts().findByMetadata({
+        metadata: new PublicKey(card.metadata),
+        tokenAddress: new PublicKey(card.token),
+        tokenOwner: new PublicKey(boxset.value?.authority || ''),
+      })
+      const _json = (JSON.parse(await $fetch(data.uri, {}))) as JsonMetadata
+      card.json = _json
+    } catch (error) {
+      continue
+    }
+  }
+
+  console.log('cards', cards)
 }
 
 const fetchMasterEditionMint = async () => {
@@ -172,10 +201,14 @@ const add_card = async () => {
   }
 }
 
-const update = async () => {}
+const update = async () => {
+}
 
 onMounted(() => {
-  fetch()
+  (async () => {
+    await fetch()
+    setTimeout(() => fetchBoxCards(), 100)
+  })()
 })
 </script>
 
@@ -250,11 +283,10 @@ onMounted(() => {
             v-for="(item, i) in boxset.cards || []"
             :key="i"
             class="group cursor-pointer card-item rounded-xl border overflow-hidden px-3 py-3 shadow-lg border-slate-500/50"
-            :to="{ name: 'box-address', params: { address: boxset.address.toString() } }"
           >
-            <!-- <div class="card-item-inside shadow rounded-2xl overflow-hidden">
+            <div v-if="item.json?.image" class="card-item-inside shadow rounded-2xl overflow-hidden">
               <img
-                :src="`${boxset.image}?r=${Math.random()}`"
+                :src="`${item.json?.image}?r=${Math.random()}`"
                 :style="{
                   height: '100%',
                   width: '100%',
@@ -263,7 +295,7 @@ onMounted(() => {
                 }"
                 class="group-hover:scale-110 transition-all duration-300"
               />
-            </div> -->
+            </div>
             <div class="mt-3 pl-2">
               <div class="text-lg font-bold pr-4">{{ shortPubkey(item.address) }}</div>
               <div class="font-light text-sm">Master Edition : {{ shortPubkey(item.master_edition) }}</div>

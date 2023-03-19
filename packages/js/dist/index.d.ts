@@ -1,3 +1,4 @@
+/// <reference types="bn.js" />
 import * as anchor from "@project-serum/anchor";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { Nftbox } from '@nftbox/contract/target/types/nftbox';

@@ -9,7 +9,9 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@metaplex-foundation/js": "^0.18.3",
+    "@metaplex-foundation/mpl-token-metadata": "^2.9.1",
     "@nftbox/contract": "workspace:*",
     "@nftbox/js": "workspace:*",
     "@nfteyez/sol-rayz": "^0.10.2",
@@ -19,8 +21,10 @@
     "@solana/wallet-adapter-base": "^0.9.22",
     "@solana/wallet-adapter-wallets": "^0.19.15",
     "@solana/web3.js": "^1.73.3",
+    "base58-js": "^2.0.0",
     "nuxt": "^3.3.1",
     "nuxt-icon": "^0.3.3",
+    "rollup-plugin-node-polyfills": "^0.2.1",
     "sass": "^1.59.3",
     "solana-wallets-vue": "^0.5.2"
   }
