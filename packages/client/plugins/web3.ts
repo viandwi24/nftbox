@@ -7,6 +7,7 @@ import {
   SolflareWalletAdapter,
 } from '@solana/wallet-adapter-wallets'
 import { Connection } from '@solana/web3.js'
+import idl from '@nftbox/contract/target/idl/nftbox.json'
 
 const walletOptions = {
   wallets: [
@@ -23,7 +24,8 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   return {
     provide: {
-      connection: new Connection('https://api.devnet.solana.com', 'confirmed')
+      connection: new Connection('https://api.devnet.solana.com', 'confirmed'),
+      idl,
     }
   }
 })
