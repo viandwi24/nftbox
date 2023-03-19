@@ -12,7 +12,7 @@
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@metaplex-foundation/js": "^0.18.3",
     "@metaplex-foundation/mpl-token-metadata": "^2.9.1",
-    "@nftbox/contract": "workspace:*",
+    "@nftbox/contract": "file:../contract",
     "@nftbox/js": "file:../js",
     "@nfteyez/sol-rayz": "^0.10.2",
     "@nuxtjs/tailwindcss": "^6.6.0",
