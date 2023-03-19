@@ -5,10 +5,6 @@ import nodePolyfills from "rollup-plugin-node-polyfills"
 export default defineNuxtConfig({
   ssr: false,
 
-  nitro: {
-    preset: 'vercel-edge'
-  },
-
   vite: {
     resolve: {
       alias: {
