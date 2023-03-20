@@ -26,6 +26,21 @@ export type Nftbox = {
           "isSigner": true
         },
         {
+          "name": "masterEdition",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "metadata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "user",
           "isMut": true,
           "isSigner": true
@@ -144,6 +159,18 @@ export type Nftbox = {
           {
             "name": "state",
             "type": "u8"
+          },
+          {
+            "name": "masterEdition",
+            "type": "publicKey"
+          },
+          {
+            "name": "metadata",
+            "type": "publicKey"
+          },
+          {
+            "name": "tokenAccount",
+            "type": "publicKey"
           }
         ]
       }
@@ -167,6 +194,26 @@ export type Nftbox = {
           },
           {
             "name": "tokenAccount",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "voucherAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "boxSet",
+            "type": "publicKey"
+          },
+          {
+            "name": "masterEdition",
+            "type": "publicKey"
+          },
+          {
+            "name": "metadata",
             "type": "publicKey"
           }
         ]
@@ -235,6 +282,21 @@ export const IDL: Nftbox = {
           "isSigner": true
         },
         {
+          "name": "masterEdition",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "metadata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "user",
           "isMut": true,
           "isSigner": true
@@ -353,6 +415,18 @@ export const IDL: Nftbox = {
           {
             "name": "state",
             "type": "u8"
+          },
+          {
+            "name": "masterEdition",
+            "type": "publicKey"
+          },
+          {
+            "name": "metadata",
+            "type": "publicKey"
+          },
+          {
+            "name": "tokenAccount",
+            "type": "publicKey"
           }
         ]
       }
@@ -376,6 +450,26 @@ export const IDL: Nftbox = {
           },
           {
             "name": "tokenAccount",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "voucherAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "boxSet",
+            "type": "publicKey"
+          },
+          {
+            "name": "masterEdition",
+            "type": "publicKey"
+          },
+          {
+            "name": "metadata",
             "type": "publicKey"
           }
         ]

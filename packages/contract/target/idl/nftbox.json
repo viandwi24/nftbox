@@ -26,6 +26,21 @@
           "isSigner": true
         },
         {
+          "name": "masterEdition",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "metadata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "user",
           "isMut": true,
           "isSigner": true
@@ -144,6 +159,18 @@
           {
             "name": "state",
             "type": "u8"
+          },
+          {
+            "name": "masterEdition",
+            "type": "publicKey"
+          },
+          {
+            "name": "metadata",
+            "type": "publicKey"
+          },
+          {
+            "name": "tokenAccount",
+            "type": "publicKey"
           }
         ]
       }
@@ -167,6 +194,26 @@
           },
           {
             "name": "tokenAccount",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VoucherAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "boxSet",
+            "type": "publicKey"
+          },
+          {
+            "name": "masterEdition",
+            "type": "publicKey"
+          },
+          {
+            "name": "metadata",
             "type": "publicKey"
           }
         ]
@@ -206,6 +253,6 @@
     }
   ],
   "metadata": {
-    "address": "49sBLw7oMr8XfpGnaS1efChgJqzDEJpKaWjhwft2Loz7"
+    "address": "D4YkZGgDuoWUeasNPY6prAWXk129YUL9xXXhw7K2wPCR"
   }
 }

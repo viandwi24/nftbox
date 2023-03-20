@@ -13,8 +13,8 @@ importers:
       '@esbuild-plugins/node-globals-polyfill': ^0.2.3
       '@metaplex-foundation/js': ^0.18.3
       '@metaplex-foundation/mpl-token-metadata': ^2.9.1
-      '@nftbox/contract': workspace:*
-      '@nftbox/js': workspace:*
+      '@nftbox/contract': file:../contract
+      '@nftbox/js': file:../js
       '@nfteyez/sol-rayz': ^0.10.2
       '@nuxtjs/tailwindcss': ^6.6.0
       '@project-serum/anchor': ^0.26.0
@@ -32,8 +32,8 @@ importers:
       '@esbuild-plugins/node-globals-polyfill': 0.2.3
       '@metaplex-foundation/js': 0.18.3
       '@metaplex-foundation/mpl-token-metadata': 2.9.1
-      '@nftbox/contract': link:../contract
-      '@nftbox/js': link:../js
+      '@nftbox/contract': file:packages/contract
+      '@nftbox/js': file:packages/js
       '@nfteyez/sol-rayz': 0.10.2_@solana+web3.js@1.73.3
       '@nuxtjs/tailwindcss': 6.6.0
       '@project-serum/anchor': 0.26.0
@@ -77,7 +77,7 @@ importers:
 
   packages/js:
     specifiers:
-      '@nftbox/contract': workspace:*
+      '@nftbox/contract': file:../contract
       '@project-serum/anchor': ^0.26.0
       '@solana/web3.js': ^1.73.3
       nodemon: ^2.0.21
@@ -87,7 +87,7 @@ importers:
       '@project-serum/anchor': 0.26.0
       '@solana/web3.js': 1.73.3
     devDependencies:
-      '@nftbox/contract': link:../contract
+      '@nftbox/contract': file:packages/contract
       nodemon: 2.0.21
       rimraf: 4.4.0
       typescript: 4.9.5
@@ -13548,6 +13548,33 @@ packages:
       archiver-utils: 2.1.0
       compress-commons: 4.1.1
       readable-stream: 3.6.2
+    dev: true
+
+  file:packages/contract:
+    resolution: {directory: packages/contract, type: directory}
+    name: '@nftbox/contract'
+    dependencies:
+      '@project-serum/anchor': 0.26.0
+      '@solana/web3.js': 1.73.3
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - supports-color
+      - utf-8-validate
+    dev: true
+
+  file:packages/js:
+    resolution: {directory: packages/js, type: directory}
+    name: '@nftbox/js'
+    version: 1.0.0
+    dependencies:
+      '@project-serum/anchor': 0.26.0
+      '@solana/web3.js': 1.73.3
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - supports-color
+      - utf-8-validate
     dev: true
 
   github.com/Bundlr-Network/avsc/a730cc8018b79e114b6a3381bbb57760a24c6cef:

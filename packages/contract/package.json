@@ -1,5 +1,6 @@
 {
   "name": "@nftbox/contract",
+  "main": "tests/nftbox.ts",
   "scripts": {
     "test": "ANCHOR_PROVIDER_URL=https://api.devnet.solana.com ANCHOR_WALLET=/home/viandwi24/.config/solana/id.json npm_package_dependencies__project_serum_anchor=^0.26.0 pnpm ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts",
     "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",

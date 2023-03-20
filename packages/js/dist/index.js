@@ -124,13 +124,16 @@ class NftBoxTool {
 }
 exports.NftBoxTool = NftBoxTool;
 class NftBoxToolBoxSet extends NftBoxTool {
-    async create(name, description, image, max_supply) {
+    async create(name, description, image, max_supply, voucher) {
         const boxSet = this.contract.findPDABoxSet(this.contract.wallet.publicKey, name);
         const tx = await this.contract.program.methods
             .createBoxSet(name, description, image, new anchor.BN(max_supply))
             .accounts({
             authority: this.contract.wallet.publicKey,
             boxSet,
+            masterEdition: voucher.masterEdition,
+            metadata: voucher.metadata,
+            tokenAccount: voucher.tokenAccount,
         })
             .rpc();
         return {

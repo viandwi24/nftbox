@@ -1,7 +1,6 @@
 use anchor_lang::prelude::*;
 
 // mistery box account
-// fields : name, description, image, authority, supply, box_cards, state
 #[account]
 pub struct BoxSetAccount {
     // name of the box
@@ -20,10 +19,15 @@ pub struct BoxSetAccount {
     pub box_cards: u64, // 8
     // state of the box (0: open, 1: closed)
     pub state: u8, // 1
+    // voucher master edition
+    pub master_edition: Pubkey, // 32
+    // voucher metadata
+    pub metadata: Pubkey, // 32
+    // voucher token account
+    pub token_account: Pubkey, // 32
 }
 
 // cards on the box account
-// fields: boxset, masterEdition, masterEditionMetadata, token_account, max_supply
 #[account]
 pub struct BoxSetCardAccount {
     // boxset of the card
@@ -34,4 +38,14 @@ pub struct BoxSetCardAccount {
     pub metadata: Pubkey, // 32
     // token account of the card
     pub token_account: Pubkey, // 32
+}
+
+#[account]
+pub struct VoucherAccount {
+    // boxset of the voucher
+    pub box_set: Pubkey, // 32
+    // master edition of the voucher
+    pub master_edition: Pubkey, // 32
+    // master edition metadata of the voucher
+    pub metadata: Pubkey, // 32
 }

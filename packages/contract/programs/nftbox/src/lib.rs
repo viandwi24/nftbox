@@ -14,7 +14,7 @@ pub mod constant;
 pub mod error;
 pub mod utils;
 
-declare_id!("49sBLw7oMr8XfpGnaS1efChgJqzDEJpKaWjhwft2Loz7");
+declare_id!("D4YkZGgDuoWUeasNPY6prAWXk129YUL9xXXhw7K2wPCR");
 
 #[program]
 pub mod nftbox {

@@ -1,0 +1,22 @@
+{
+  "name": "VOUCHER 3 MY SOL PACKS",
+  "symbol": "MSP",
+  "description": "claim 3 random My Sol NFTs on NFTBOX",
+  "image": "https://raw.githubusercontent.com/viandwi24/nftbox/main/assets/examples/images/nft_voucher.png",
+  "seller_fee_basis_points": 500,
+  "external_url": "",
+  "background_color": "1E1E1E",
+  "properties": {
+    "collection": {
+      "name": "MYSOLPACK",
+      "family": "MYSOLPACK"
+    },
+    "category": "image",
+    "creators": [
+      {
+        "address": "FVYbp7ZHXN7YwDYM6uAfhkfgqGna5aFrYLRA9EMnWELL",
+        "share": 100
+      }
+    ]
+  }
+}

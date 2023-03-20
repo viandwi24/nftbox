@@ -30,18 +30,6 @@ const fetch_boxsets = async () => {
     state: item.account.state === 0 ? 0 : 1 as 0 | 1
   })))
   loading.value = false
-  // const d = await connection.value.getParsedAccountInfo(new PublicKey('FNXb3mWzpcjAnCAXHDY7i4EEwiZ67525yossKig5VZV8'))
-  // console.log('hehe', d, d.value?.owner.toString())
-  // const [pda] = PublicKey.findProgramAddressSync(
-  //   [
-  //       Buffer.from("metadata"),
-  //       new PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s').toBuffer(),
-  //       new PublicKey('FNXb3mWzpcjAnCAXHDY7i4EEwiZ67525yossKig5VZV8').toBuffer(),
-  //       Buffer.from("edition"),
-  //   ],
-  //   new PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s')
-  // )
-  // console.log('awoekwoaek', pda.toString())
 }
 onMounted(() => {
   fetch_boxsets()
