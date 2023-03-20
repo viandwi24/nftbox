@@ -1,6 +1,5 @@
 {
   "name": "@nftbox/js",
-  "version": "1.0.0",
   "description": "a javascript library for nftbox",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -31,6 +31,9 @@ const boxset = ref<{
   max_supply: number
   supply: number
   box_cards: number
+  master_edition: string
+  metadata: string
+  token_account: string
   cards: {
     address: string
     master_edition: string
@@ -64,6 +67,9 @@ const fetch = async () => {
       max_supply: _data_box?.maxSupply.toNumber() || 0,
       supply: _data_box?.supply.toNumber() || 0,
       box_cards: _data_box?.boxCards.toNumber() || 0,
+      master_edition: _data_box?.masterEdition.toBase58() || '',
+      metadata: _data_box?.metadata.toBase58() || '',
+      token_account: _data_box?.tokenAccount.toBase58() || '',
       cards: _data_cards?.map(c => ({
         address: c.publicKey.toBase58(),
         master_edition: c.account.masterEdition.toBase58(),
@@ -222,45 +228,63 @@ onMounted(() => {
       </template>
       <div class="flex flex-col space-y-4">
         <div class="flex">
-          <div class="w-1/5 mt-2">Box Address</div>
+          <div class="w-2/6 mt-2">Box Address</div>
           <div class="flex-1">
             <input type="text" class="w-full border-2 border-white/10 rounded-lg px-4 py-2 bg-transparent text-white read-only:bg-slate-800" readonly :value="boxset.address" />
           </div>
         </div>
         <div class="flex">
-          <div class="w-1/5 mt-2">Authority Address</div>
+          <div class="w-2/6 mt-2">Authority Address</div>
           <div class="flex-1">
             <input type="text" class="w-full border-2 border-white/10 rounded-lg px-4 py-2 bg-transparent text-white read-only:bg-slate-800" readonly :value="boxset.authority" />
           </div>
         </div>
         <div class="flex">
-          <div class="w-1/5 mt-2">Supply</div>
+          <div class="w-2/6 mt-2">Supply</div>
           <div class="flex-1">
             <input type="number" class="w-full border-2 border-white/10 rounded-lg px-4 py-2 bg-transparent text-white read-only:bg-slate-800" readonly :value="boxset.supply" />
           </div>
         </div>
         <div class="flex">
-          <div class="w-1/5 mt-2">Max Supply</div>
+          <div class="w-2/6 mt-2">Max Supply</div>
           <div class="flex-1">
             <input type="number" class="w-full border-2 border-white/10 rounded-lg px-4 py-2 bg-transparent text-white read-only:bg-slate-800" :readonly="!isAuthority" v-model="boxset.max_supply" />
           </div>
         </div>
         <div class="flex">
-          <div class="w-1/5 mt-2">Name</div>
+          <div class="w-2/6 mt-2">Name</div>
           <div class="flex-1">
             <input type="text" class="w-full border-2 border-white/10 rounded-lg px-4 py-2 bg-transparent text-white read-only:bg-slate-800" :readonly="!isAuthority" v-model="boxset.name" />
           </div>
         </div>
         <div class="flex">
-          <div class="w-1/5 mt-2">Description</div>
+          <div class="w-2/6 mt-2">Description</div>
           <div class="flex-1">
             <input type="text" class="w-full border-2 border-white/10 rounded-lg px-4 py-2 bg-transparent text-white read-only:bg-slate-800" :readonly="!isAuthority" v-model="boxset.description" />
           </div>
         </div>
         <div class="flex">
-          <div class="w-1/5 mt-2">Image</div>
+          <div class="w-2/6 mt-2">Image</div>
           <div class="flex-1">
             <input type="text" class="w-full border-2 border-white/10 rounded-lg px-4 py-2 bg-transparent text-white read-only:bg-slate-800" :readonly="!isAuthority" v-model="boxset.image" />
+          </div>
+        </div>
+        <div class="flex">
+          <div class="w-2/6 mt-2">Voucher Master Edition > Edition Metadata</div>
+          <div class="flex-1">
+            <input type="text" class="w-full border-2 border-white/10 rounded-lg px-4 py-2 bg-transparent text-white read-only:bg-slate-800" readonly v-model="boxset.master_edition" />
+          </div>
+        </div>
+        <div class="flex">
+          <div class="w-2/6 mt-2">Voucher Master Edition > Nft Metadata</div>
+          <div class="flex-1">
+            <input type="text" class="w-full border-2 border-white/10 rounded-lg px-4 py-2 bg-transparent text-white read-only:bg-slate-800" readonly v-model="boxset.metadata" />
+          </div>
+        </div>
+        <div class="flex">
+          <div class="w-2/6 mt-2">Voucher Token</div>
+          <div class="flex-1">
+            <input type="text" class="w-full border-2 border-white/10 rounded-lg px-4 py-2 bg-transparent text-white read-only:bg-slate-800" readonly v-model="boxset.token_account" />
           </div>
         </div>
         <div v-if="isAuthority" class="flex items-center justify-between">

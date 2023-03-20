@@ -23,7 +23,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   return {
     provide: {
-      connection: new Connection('https://api.devnet.solana.com', 'confirmed'),
+      connection: new Connection('https://devnet.genesysgo.net/', 'confirmed'),
     }
   }
 })

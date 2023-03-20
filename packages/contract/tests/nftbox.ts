@@ -13,6 +13,11 @@ const generateBoxSetName = async (contract: NftBoxContract) => `Example 3 Nft Ra
 
 // tests
 const runBoxSetTest: RunTest = (wallet, createContract) => {
+  const mint = new PublicKey('5VTWJhA9YzmrFmauMd3JYop4TouP2oF5nSXb5KWkYRSh')
+  const masterEdition = new PublicKey('AARuLthwYGNUmB3JUxJyMesJfJfJiEJRso9VcXNRmd8S')
+  const metadata = new PublicKey('AKeGZ4DKpZZiX6vi8kzUTL391AAzXzbr1YGMFFhZdyFo')
+  const tokenAccount = new PublicKey('7p7vUaPNovzYgwhvjMvSHwzd19Jhcxsp3f5nVyaEGCgr')
+
   it("boxset::create", async () => {
     const contract = createContract(wallet)
     const boxset_name = `Example 3 Nft Random Box (${await contract.getBoxSetAccountCount() + 1})`
@@ -31,6 +36,9 @@ const runBoxSetTest: RunTest = (wallet, createContract) => {
       .accounts({
         authority: wallet.publicKey,
         boxSet: boxAccount,
+        masterEdition,
+        metadata,
+        tokenAccount,
       })
       .rpc()
 
@@ -58,6 +66,9 @@ const runBoxSetTest: RunTest = (wallet, createContract) => {
         .accounts({
           authority: generatedWallet.publicKey, // <== authority is not signer so it will make error
           boxSet: boxAccount,
+          masterEdition,
+          metadata,
+          tokenAccount,
         })
         .rpc()
     } catch (error) {
@@ -85,6 +96,9 @@ const runBoxSetTest: RunTest = (wallet, createContract) => {
         .accounts({
           authority: wallet.publicKey,
           boxSet: boxAccount,
+          masterEdition,
+          metadata,
+          tokenAccount,
         })
         .rpc()
     } catch (error) {
@@ -109,6 +123,9 @@ const runBoxSetTest: RunTest = (wallet, createContract) => {
         .accounts({
           authority: wallet.publicKey,
           boxSet: boxAccount,
+          masterEdition,
+          metadata,
+          tokenAccount,
         })
         .rpc()
     } catch (error) {
@@ -166,6 +183,6 @@ describe("nftbox", () => {
 
 
   // run tests suite
-  // runBoxSetTest(wallet, createContract)
-  runBoxSetCardTest(wallet, createContract)
+  runBoxSetTest(wallet, createContract)
+  // runBoxSetCardTest(wallet, createContract)
 });

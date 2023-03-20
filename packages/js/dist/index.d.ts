@@ -1,4 +1,3 @@
-/// <reference types="bn.js" />
 import * as anchor from "@project-serum/anchor";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { Nftbox } from '@nftbox/contract/target/types/nftbox';
@@ -82,7 +81,12 @@ export declare class NftBoxTool {
     constructor(contract: NftBoxContract);
 }
 export declare class NftBoxToolBoxSet extends NftBoxTool {
-    create(name: string, description: string, image: string, max_supply: number, voucher: {
+    create(cardOpts: {
+        name: string;
+        description: string;
+        image: string;
+        max_supply: number;
+    }, voucher: {
         masterEdition: PublicKey;
         metadata: PublicKey;
         tokenAccount: PublicKey;
